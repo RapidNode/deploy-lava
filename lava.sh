@@ -120,7 +120,7 @@ EOF
 
 $EXECUTE config chain-id $CHAIN_ID
 $EXECUTE config keyring-backend test
-$EXECUTE config node tcp://localhost:${PORT}657
+$EXECUTE config node tcp://172.17.0.1:${PORT}657
 $EXECUTE init $MONIKER --chain-id $CHAIN_ID
 
 # Set peers and seeds
