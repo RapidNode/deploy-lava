@@ -6,6 +6,7 @@ sudo apt update && sudo apt upgrade -y && sudo apt install curl tar wget clang p
 echo "5 installation_progress"
 
 # Variables
+MONIKER=$1
 PROJECT=lava
 EXECUTE=lavad
 CHAIN_ID=lava-testnet-2
