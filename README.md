@@ -1,1 +1,1 @@
-# lava-node101
+# lava
