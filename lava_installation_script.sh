@@ -44,8 +44,8 @@ source $HOME/.bash_profile
 sleep 1
 if [ ! $MONIKER ]; then
 	read -p "ENTER MONIKER NAME: " MONIKER
-	echo 'export MONIKER='$MONIKER >> $HOME/.bash_profile
 fi
+echo 'export MONIKER='$MONIKER >> $HOME/.bash_profile
 
 echo "30 installation_progress"
 
