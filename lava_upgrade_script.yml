@@ -57,18 +57,6 @@
         path: "/tmp/lavad-{{ lavad_version_url }}-linux-amd64"
         state: absent
 
-    - name: Check if upgrade-info.json exists
-      stat:
-        path: "{{ lava_directory }}/data/upgrade-info.json"
-      register: upgrade_info
-
-    - name: Copy upgrade info json if present
-      copy:
-        src: "{{ lava_directory }}/data/upgrade-info.json"
-        dest: "{{ lava_directory }}/cosmovisor/genesis/upgrade-info.json"
-        remote_src: yes
-      when: upgrade_info.stat.exists
-
     - name: Start lava node service
       systemd:
         name: lavad
