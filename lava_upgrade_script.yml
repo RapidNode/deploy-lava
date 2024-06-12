@@ -12,7 +12,7 @@
   tasks:
     - name: Stop lava node service
       systemd:
-        name: lava-node
+        name: lavad
         state: stopped
 
     - name: Download new lava binary
@@ -81,7 +81,7 @@
 
     - name: Start lava node service
       systemd:
-        name: lava-node
+        name: lavad
         state: started
         enabled: yes
 
