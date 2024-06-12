@@ -1,0 +1,87 @@
+---
+- name: Update lava Node Binary
+  hosts: localhost
+  become: true
+  vars:
+    lavad_version_url: "2.1.1"
+    lavad_version_path: "2.1.1"
+    lava_directory: "/root/.lava"
+    lava_binary_url: "https://github.com/lavanet/lava/releases/download/v{{ lavad_version_url }}/lavad-v{{ lavad_version_url }}-linux-amd64"
+    binary_path: "/usr/local/bin/lavad"
+
+  tasks:
+    - name: Stop lava node service
+      systemd:
+        name: lava-node
+        state: stopped
+
+    - name: Download new lava binary
+      get_url:
+        url: "{{ lava_binary_url }}"
+        dest: "/tmp/lavad-{{ lavad_version_url }}-linux-amd64"
+        mode: '0755'
+
+    - name: Replace old binary with new binary
+      copy:
+        src: "/tmp/lavad-{{ lavad_version_url }}-linux-amd64"
+        dest: "{{ binary_path }}"
+        remote_src: yes
+        force: yes
+
+    - name: Set executable permissions on the new binary
+      file:
+        path: "{{ binary_path }}"
+        mode: '0755'
+
+    - name: Prepare directory for new binary in Cosmovisor
+      file:
+        path: "{{ lava_directory }}/cosmovisor/upgrades/v{{ lavad_version_path }}/bin"
+        state: directory
+
+    - name: Copy new binary to Cosmovisor upgrade directory
+      copy:
+        src: "/tmp/lavad-{{ lavad_version_url }}-linux-amd64"
+        dest: "{{ lava_directory }}/cosmovisor/upgrades/v{{ lavad_version_path }}/bin/lavad"
+        mode: '0755'
+        remote_src: yes
+
+    - name: Copy new binary to genesis directory
+      copy:
+        src: "/tmp/lavad-{{ lavad_version_url }}-linux-amd64"
+        dest: "/root/.lava/cosmovisor/genesis/bin/lavad"
+        remote_src: yes
+        force: yes
+
+    - name: Remove temporary binary file
+      file:
+        path: "/tmp/lavad-{{ lavad_version_url }}-linux-amd64"
+        state: absent
+
+    - name: Download and extract the latest chain snapshot
+      block:
+        - name: Download snapshot
+          get_url:
+            url: "https://snapshots.kjnodes.com/lava-testnet/snapshot_latest.tar.lz4"
+            dest: "/tmp/lava-latest.tar.lz4"
+        - name: Extract snapshot
+          shell: |
+            lz4 -d /tmp/lava-latest.tar.lz4 | tar xf - -C {{ lava_directory }}
+
+    - name: Check if upgrade-info.json exists
+      stat:
+        path: "{{ lava_directory }}/data/upgrade-info.json"
+      register: upgrade_info
+
+    - name: Copy upgrade info json if present
+      copy:
+        src: "{{ lava_directory }}/data/upgrade-info.json"
+        dest: "{{ lava_directory }}/cosmovisor/genesis/upgrade-info.json"
+        remote_src: yes
+      when: upgrade_info.stat.exists
+
+    - name: Start lava node service
+      systemd:
+        name: lava-node
+        state: started
+        enabled: yes
+
