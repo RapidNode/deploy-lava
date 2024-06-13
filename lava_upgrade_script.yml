@@ -57,9 +57,3 @@
         path: "/tmp/lavad-{{ lavad_version_url }}-linux-amd64"
         state: absent
 
-    - name: Start lava node service
-      systemd:
-        name: lavad
-        state: started
-        enabled: yes
-
