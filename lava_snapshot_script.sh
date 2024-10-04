@@ -13,9 +13,13 @@ PORT=26
 SNAPSHOT=https://snapshots.kjnodes.com/lava-testnet/snapshot_latest.tar.lz4
 
 cp $HOME/$SYSTEM_FOLDER/data/priv_validator_state.json $HOME/$SYSTEM_FOLDER/priv_validator_state.json.backup
-rm -rf $HOME/$SYSTEM_FOLDER/data/*
-mv $HOME/$SYSTEM_FOLDER/priv_validator_state.json.backup $HOME/$SYSTEM_FOLDER/data/priv_validator_state.json
+cp $HOME/$SYSTEM_FOLDER/config/priv_validator_key.json $HOME/$SYSTEM_FOLDER/priv_validator_key.json.backup
+
+lavad tendermint unsafe-reset-all --home /root/.lava --keep-addr-book
 curl -L $SNAPSHOT | tar -I lz4 -xf - -C $HOME/$SYSTEM_FOLDER
+
+mv $HOME/$SYSTEM_FOLDER/priv_validator_state.json.backup $HOME/$SYSTEM_FOLDER/data/priv_validator_state.json
+mv $HOME/$SYSTEM_FOLDER/priv_validator_key.json.backup $HOME/$SYSTEM_FOLDER/config/priv_validator_key.json
 
 # Upgrade info
 [[ -f $HOME/$SYSTEM_FOLDER/data/upgrade-info.json ]] && cp $HOME/$SYSTEM_FOLDER/data/upgrade-info.json $HOME/$SYSTEM_FOLDER/cosmovisor/genesis/upgrade-info.json
