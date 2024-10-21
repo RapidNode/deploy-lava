@@ -20,8 +20,8 @@ ADDRBOOK=https://snapshots.kjnodes.com/lava-testnet/addrbook.json
 PORT=26
 DENOM=ulava
 GO_VERSION=$(curl -L https://golang.org/VERSION?m=text | grep '^go' | sed 's/^go//')
-PEERS=$(curl -sS https://lava-testnet-rpc.polkachu.com/net_info | jq -r '.result.peers[] | "\(.node_info.id)@\(.remote_ip):\(.node_info.listen_addr)"' | awk -F ':' '{print $1":"$(NF)}' | head -n 5 | paste -sd, -)
-SEEDS="3f472746f46493309650e5a033076689996c8881@lava-testnet.rpc.kjnodes.com:14459"
+PEERS=3693ea5a8a9c0590440a7d6c9a98a022ce3b2455@lava-testnet-peer.itrocket.net:20656,0314d53cc790860fb51f36ac656a19789800ce5c@176.103.222.20:26656,e8722c8eb627427b200fe749398bbd447404621c@67.220.85.202:23656,40d1682c93a2982de8108e3a6c124dddc3ca1a04@37.27.179.163:19956,d1730b774b7c1d52dd9f6ae874a56de958aa147e@139.45.205.60:23656,701773fb883439cd8de4fe1fe10b0d528ba46f8f@65.109.84.33:32656,106b0d4b7c7d5ddd62e1f12fcc90e05d1916120f@91.237.141.76:26656,13a9209a4d08803a3becac57de8eb02dd51f8f41@65.109.23.114:19956,3358fe83f6d5210fcf05045ac727f5b4f92c2a4b@95.216.40.211:26656,85e097f9fa47dffc8cb7ca820ccd28f11882cb21@177.54.156.69:29656,feb227f8919ec0af3d0181dae19cc309b85ffd33@213.21.195.14:23656
+SEEDS=eb7832932626c1c636d16e0beb49e0e4498fbd5e@lava-testnet-seed.itrocket.net:20656
 
 sleep 2
 
@@ -150,3 +150,6 @@ sed -i -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0$DENOM\"/" $HOME/$
 sed -i -e 's/localhost/172.17.0.1/g; s/127.0.0.1/172.17.0.1/g' $HOME/$SYSTEM_FOLDER/config/app.toml
 sed -i -e 's/localhost/172.17.0.1/g; s/127.0.0.1/172.17.0.1/g' $HOME/$SYSTEM_FOLDER/config/config.toml
 sed -i -e 's/localhost/172.17.0.1/g; s/127.0.0.1/172.17.0.1/g' $HOME/$SYSTEM_FOLDER/config/client.toml
+
+wget -O $HOME/.lava/config/addrbook.json https://server-4.itrocket.net/testnet/lava/addrbook.json
+wget -O $HOME/.lava/config/genesis.json https://server-4.itrocket.net/testnet/lava/genesis.json
