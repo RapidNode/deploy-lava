@@ -10,7 +10,10 @@ PORT=26
 #fast sync with snapshot
 # wget -q -O - https://polkachu.com/testnets/${PROJECT}/snapshots > webpage.html
 # SNAPSHOT=$(grep -o "https://snapshots.polkachu.com/testnet-snapshots/${PROJECT}/${PROJECT}_[0-9]*.tar.lz4" webpage.html | head -n 1)
-SNAPSHOT=https://snapshots.kjnodes.com/lava-testnet/snapshot_latest.tar.lz4
+#SNAPSHOT=https://snapshots.kjnodes.com/lava-testnet/snapshot_latest.tar.lz4
+
+wget -q -O /root/webpage_lava.html https://server-4.itrocket.net/testnet/lava/
+SNAPSHOT=https://server-4.itrocket.net/testnet/lava/$(grep -o "lava_[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}_[0-9]*_snap\.tar\.lz4" /root/webpage_lava.html | tail -n 1)
 
 cp $HOME/$SYSTEM_FOLDER/data/priv_validator_state.json $HOME/$SYSTEM_FOLDER/priv_validator_state.json.backup
 cp $HOME/$SYSTEM_FOLDER/config/priv_validator_key.json $HOME/$SYSTEM_FOLDER/priv_validator_key.json.backup
