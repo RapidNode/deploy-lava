@@ -4,8 +4,8 @@
   become: true
   vars:
     ansible_python_interpreter: /usr/bin/python3.10  # Explicit Python path
-    lavad_version_url: "4.0.0"
-    lavad_version_path: "4.0.0"
+    lavad_version_url: "4.1.0"
+    lavad_version_path: "4.1.0"
     lava_directory: "/root/.lava"
     lava_binary_url: "https://github.com/lavanet/lava/releases/download/v{{ lavad_version_url }}/lavad-v{{ lavad_version_url }}-linux-amd64"
     binary_path: "/usr/local/bin/lavad"
